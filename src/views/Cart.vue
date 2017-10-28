@@ -61,16 +61,24 @@ export default {
     handleRecommend() {
       // connect to webservice & get recommend list
       this.recommendList = [];
-    },
-    handleCheckout() {
-      // go to check out
+      var uniqueItems = []
+
+      uniqueItems = this.selectList.filter((elem, index, self) => {
+
+          return index == self.indexOf(elem);
+      })      
+
+      // console.log('=======================uniqueItems')
+      console.log(uniqueItems)
       // TODO: change post url to our recommender api
       axios
         .post(`http://jsonplaceholder.typicode.com/posts`, {
-          itemID: this.selectList
+
+          itemID: uniqueItems
+
         })
         .then(response => {
-          console.log("====================response");
+          // console.log("====================response");
           console.log(response);
 
           // dummy data
@@ -93,6 +101,9 @@ export default {
         .catch(e => {
           this.errors.push(e);
         }); 
+    },
+    handleCheckout() {
+      // go to check out
     }
   }
 };
