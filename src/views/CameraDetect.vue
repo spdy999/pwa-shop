@@ -20,22 +20,22 @@
       <img id="preview" :src="captureData" width="100%" />
     </div>
     <!--
-                                                        <div :class="viewMode?'orientationH':'orientationV'">
-                                                          <div class="cameraButton">
-                                                            <mu-raised-button class="cameraBtn1" fullWidth secondary icon="arrow_back" label="Back" @click="handleCancel" :disabled="captureDisabled" />
+                                                          <div :class="viewMode?'orientationH':'orientationV'">
+                                                            <div class="cameraButton">
+                                                              <mu-raised-button class="cameraBtn1" fullWidth secondary icon="arrow_back" label="Back" @click="handleCancel" :disabled="captureDisabled" />
+                                                            </div>
+                                                            <div class="cameraButton">
+                                                              <mu-raised-button class="cameraBtn2" fullWidth primary icon="camera" :label="captureLabel[captureStatus]" @click="handleCapture" :disabled="captureDisabled" />
+                                                            </div>
+                                                            <div style="clear:both"></div>
                                                           </div>
-                                                          <div class="cameraButton">
-                                                            <mu-raised-button class="cameraBtn2" fullWidth primary icon="camera" :label="captureLabel[captureStatus]" @click="handleCapture" :disabled="captureDisabled" />
+                                                          <div v-if="captureMode === 'vdo'">
+                                                            <video ref="video" autoplay="true" width="100%"></video>
                                                           </div>
-                                                          <div style="clear:both"></div>
-                                                        </div>
-                                                        <div v-if="captureMode === 'vdo'">
-                                                          <video ref="video" autoplay="true" width="100%"></video>
-                                                        </div>
-                                                        <div v-if="captureMode === 'preview'">
-                                                          <img :src="captureData" style="width:100%" />>
-                                                        </div>
-                                                        -->
+                                                          <div v-if="captureMode === 'preview'">
+                                                            <img :src="captureData" style="width:100%" />>
+                                                          </div>
+                                                          -->
   </div>
 </template>
 <script>

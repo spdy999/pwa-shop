@@ -23,8 +23,6 @@
 </template>
 <script>
 import { mapState } from 'vuex'
-import Kairos from 'kairos-api'
-var client = new Kairos('60bb2ea7', '72f2ce0103471c4e4a838d443ffb6cee')
 export default {
   data() {
     return {
@@ -85,6 +83,8 @@ export default {
   methods: {
     handleSave() {
       var self = this
+      self.btnDisabled = true
+      var canvas = this.getCapture()
       this.uploadCloudStorage(canvas.toDataURL('image/jpeg'), canvas.width, canvas.height)
         .then(res => {
           self.btnDisabled = false

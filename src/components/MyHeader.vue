@@ -12,6 +12,7 @@
                   <mu-icon-button icon="shopping_cart" slot="right" to="/camerapos" />
                   <mu-icon-button icon="photo_library" slot="right" to="/gallery" />
                   -->
+      <mu-icon-button icon="vpn_key" slot="right" to="/shop" @click="bottomSheet = false" />
       <mu-icon-button v-show="!user" icon="account_circle" slot="right" to="/login" />
 
       <mu-flat-button v-show="user" slot="right" ref="userButton" to="/profile">
@@ -34,6 +35,7 @@
           <mu-bottom-nav-item value="" title="Instruction" icon="home" />
           <mu-bottom-nav-item value="profile" title="Profile" icon="account_circle" />
           <mu-bottom-nav-item value="cart" title="Shopping" icon="shopping_cart" />
+          <mu-bottom-nav-item value="coupon" title="Coupon" icon="money_attach" />
         </mu-bottom-nav>
       </template>
     </mu-paper>
@@ -44,6 +46,7 @@
         </mu-sub-header>
         <mu-list-item title="Outside Store Camera" to="/cameraoutside" />
         <mu-list-item title="In-store Camera" to="/camerainstore" />
+        <mu-list-item title="POS Camera" to="/shopface" />
       </mu-list>
     </mu-bottom-sheet>
   </div>
@@ -89,6 +92,8 @@ export default {
     },
     handleFullscreen() {
       if (this.$route.path.substring(0, 7) === '/camera') {
+        this.fullScreen = true
+      } else if (this.$route.path === '/shopface') {
         this.fullScreen = true
       } else if (this.$route.path.substring(0, 5) === '/shop') {
         this.fullScreen = false

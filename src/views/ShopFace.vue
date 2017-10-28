@@ -1,17 +1,12 @@
 <template>
   <div>
-    <mu-card>
-      <mu-card-text>
-        <video v-if="step===0" ref="video" id="video" autoplay="true" width="100%"></video>
-        <img id="preview" :src="captureData" width="100%" v-if="step==1" />
-      </mu-card-text>
-      <mu-card-actions>
-
-        <mu-raised-button icon="search" :disabled="btnCaptureDisabled" v-model="btnCapture" primary :label="btnCapture" fullWidth @click="handleCapture" />
-        <br /><br />
-        <mu-raised-button icon="photo_library" secondary label="Go to face list" fullWidth to="/shopfacelist" />
-      </mu-card-actions>
-    </mu-card>
+    <video v-show="step===0" ref="video" id="video" autoplay="true" width="100%"></video>
+    <img id="preview" :src="captureData" width="100%" v-show="step==1" />
+    <div style="position: absolute; bottom:0; width:100%; padding:0 10px; z-index:999">
+      <mu-raised-button icon="search" :disabled="btnCaptureDisabled" v-model="btnCapture" primary :label="btnCapture" fullWidth @click="handleCapture" />
+      <br /><br />
+      <mu-raised-button icon="photo_library" secondary label="Go to face list" fullWidth to="/shopfacelist" />
+    </div>
   </div>
 </template>
 <script>
@@ -89,7 +84,9 @@ export default {
         })
         .catch(err => {
           console.log('Error')
-          console.log(err)
+          alert(err.body.Errors[0].Message)
+          self.step = 0
+          self.btnCapture = 'CAPTURE & IDENTIFY'
         })
     },
     getCapture() {

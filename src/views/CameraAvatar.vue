@@ -20,22 +20,22 @@
       <img id="preview" :src="captureData" width="100%" />
     </div>
     <!--
-                                                        <div :class="viewMode?'orientationH':'orientationV'">
-                                                          <div class="cameraButton">
-                                                            <mu-raised-button class="cameraBtn1" fullWidth secondary icon="arrow_back" label="Back" @click="handleCancel" :disabled="captureDisabled" />
-                                                          </div>
-                                                          <div class="cameraButton">
-                                                            <mu-raised-button class="cameraBtn2" fullWidth primary icon="camera" :label="captureLabel[captureStatus]" @click="handleCapture" :disabled="captureDisabled" />
-                                                          </div>
-                                                          <div style="clear:both"></div>
-                                                        </div>
-                                                        <div v-if="captureMode === 'vdo'">
-                                                          <video ref="video" autoplay="true" width="100%"></video>
-                                                        </div>
-                                                        <div v-if="captureMode === 'preview'">
-                                                          <img :src="captureData" style="width:100%" />>
-                                                        </div>
-                                                        -->
+                                                              <div :class="viewMode?'orientationH':'orientationV'">
+                                                                <div class="cameraButton">
+                                                                  <mu-raised-button class="cameraBtn1" fullWidth secondary icon="arrow_back" label="Back" @click="handleCancel" :disabled="captureDisabled" />
+                                                                </div>
+                                                                <div class="cameraButton">
+                                                                  <mu-raised-button class="cameraBtn2" fullWidth primary icon="camera" :label="captureLabel[captureStatus]" @click="handleCapture" :disabled="captureDisabled" />
+                                                                </div>
+                                                                <div style="clear:both"></div>
+                                                              </div>
+                                                              <div v-if="captureMode === 'vdo'">
+                                                                <video ref="video" autoplay="true" width="100%"></video>
+                                                              </div>
+                                                              <div v-if="captureMode === 'preview'">
+                                                                <img :src="captureData" style="width:100%" />>
+                                                              </div>
+                                                              -->
   </div>
 </template>
 <script>
@@ -117,18 +117,24 @@ export default {
             return res.body.uploaded_image_url
           })
           .then(res => {
+            console.log('finish-kairos')
+            console.log(res)
+            return self.uploadCloudStorage(canvas.toDataURL('image/jpeg'), canvas.width, canvas.height)
+          })
+          .then(res => {
+            console.log('finish-cloudstorage')
             console.log(res)
             return self.$firebase.database().ref('users/' + self.user.uid + '/profile/').set({
               displayName: self.user.displayName,
               uid: self.user.uid,
               photoURL: self.user.photoURL,
-              avatarURL: res
+              avatarURL: res.downloadURL
             })
           })
           .then(res => {
             self.btnDisabled = false
             self.step = 0
-            // self.$router.push('/profile')
+            self.$router.push('/profile')
           })
       }
       /* upload cloud storage
