@@ -5,12 +5,22 @@
       <mu-select-field v-model="product" label="Select product">
         <mu-menu-item v-for="(item,idx) in shelfList" :key="idx" :value="item" :title="item" />
       </mu-select-field>
-      <mu-raised-button primary label="Add" @click="handleSelect()" />
-      <mu-raised-button secondary label="Clear" @click="handleClear()" />
+      <mu-raised-button primary label="Add" @click="handleSelect('product')" />
+      <mu-raised-button secondary label="Clear" @click="handleClear('products')" />
+    </mu-content-block>
+    <mu-content-block>
+      <mu-select-field v-model="group" label="Select group">
+        <mu-menu-item v-for="(item,idx) in groups" :key="idx" :value="item" :title="item" />
+      </mu-select-field>
+      <mu-raised-button primary label="Add" @click="handleSelect('group')" />
+      <mu-raised-button secondary label="Clear" @click="handleClear('groups')" />
     </mu-content-block>
     <mu-sub-header>Your cart</mu-sub-header>
     <mu-content-block>
       {{selectList}}
+    </mu-content-block>
+    <mu-content-block>
+      {{selectGroup}}
     </mu-content-block>
     <mu-content-block>
       <mu-raised-button secondary label="Get Recommend items" fullWidth @click="handleRecommend()" />
@@ -44,53 +54,75 @@ export default {
   data() {
     return {
       product: "",
-      shelfList: [29126, 7076, 12820],
+      group: "",
+      selectGroup: "",
+      shelfList: ["264", "339", "12820"],
+      groups: ['M18-24', 'M25-34', 'M35-44', 'M44+', 'F18-24', 'F25-34', 'F35-44', 'F44+'],
       selectList: [],
       recommendList: [],
       errors: []
     };
   },
   methods: {
-    handleSelect() {
-      var val = this.product;
-      this.selectList.push(val);
+    handleSelect(type) {
+      var val = "";
+
+      switch(type) {
+        
+        case 'group':
+          val = this.group;
+          this.selectGroup = val;
+          break;
+
+        case 'product':
+          val = this.product;
+          this.selectList.push(val);
+          break;
+          
+      }
+      
     },
-    handleClear() {
-      this.selectList = [];
+    handleClear(type) {
+
+      switch(type) {
+        case 'groups':
+          this.groups = [];
+          break;
+        
+        case 'products':
+          this.selectList = [];
+          break;
+      }
     },
     handleRecommend() {
       // connect to webservice & get recommend list
       this.recommendList = [];
-      var uniqueItems = []
+      var uniqueItems = [];
 
       uniqueItems = this.selectList.filter((elem, index, self) => {
-
-          return index == self.indexOf(elem);
-      })      
+        return index == self.indexOf(elem);
+      });
 
       // console.log('=======================uniqueItems')
-      console.log(uniqueItems)
+      console.log(uniqueItems);
       // TODO: change post url to our recommender api
       axios
-        .post(`http://jsonplaceholder.typicode.com/posts`, {
-
-          itemID: uniqueItems
-
+        .post(`http://35.202.6.239/api/v1.0/post_recommendation/`, {
+          itemId: uniqueItems,
+          group: this.selectGroup
         })
         .then(response => {
           // console.log("====================response");
           console.log(response);
 
           // dummy data
-          response = {
-            result: "success",
-            recommend_itemId: "36361"
-          };
+          // response = {
+          //   result: "success",
+          //   recommend_itemId: "36361"
+          // };
           // TODO: response.result
-          if (response.result === "success") {
-
-            this.recommendList = response.recommend_itemId;
-
+          if (response.data.result === "success") {
+            this.recommendList = response.data.recommend_itemId;
           } else {
             // handle unsuccessful result
             console.log("====================response.result");
@@ -100,7 +132,7 @@ export default {
         })
         .catch(e => {
           this.errors.push(e);
-        }); 
+        });
     },
     handleCheckout() {
       // go to check out
