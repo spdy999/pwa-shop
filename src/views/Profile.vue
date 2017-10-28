@@ -1,12 +1,21 @@
 <template>
   <div>
     <mu-card>
+      <!--
       <mu-card-header :title="user.displayName" :subTitle="user.email">
         <mu-avatar :src="user.photoURL" slot="avatar" />
       </mu-card-header>
+      -->
+      <!--
       <mu-card-media v-if="avatarURL">
         <img :src="avatarURL" />
       </mu-card-media>
+      -->
+      <mu-card-text>
+        <img :src="avatarURL" height="240" style="float:left; margin-right:1em; margin-bottom:1em" />
+        {{user.displayName}}<br />
+        {{user.email}}
+      </mu-card-text>
       <mu-card-actions>
         <mu-raised-button primary fullWidth label="Change My Picture" to="/cameraavatar" />
         <!-- <mu-raised-button secondary fullWidth label="Test Detect" to="/cameradetect" /> -->

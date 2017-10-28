@@ -57,7 +57,9 @@ export default {
       captureStatus: 0,
       captureMode: 'vdo',
       captureData: null,
-      allowCapture: true
+      allowCapture: true,
+      captureWidth: 0,
+      captureHeight: 0
     }
   },
   computed: {
@@ -104,10 +106,11 @@ export default {
       var self = this
       if (self.user) {
         self.btnDisabled = true
-        var canvas = this.getCapture()
+        // var canvas = this.getCapture()
 
         client.enroll({
-          image: canvas.toDataURL('image/jpeg'),
+          // image: canvas.toDataURL('image/jpeg'),
+          image: self.captureData,
           subject_id: self.user.uid,
           gallery_name: 'SID'
         })
@@ -119,7 +122,7 @@ export default {
           .then(res => {
             console.log('finish-kairos')
             console.log(res)
-            return self.uploadCloudStorage(canvas.toDataURL('image/jpeg'), canvas.width, canvas.height)
+            return self.uploadCloudStorage(self.captureData, captureWidth, captureHeight)
           })
           .then(res => {
             console.log('finish-cloudstorage')
@@ -137,23 +140,6 @@ export default {
             self.$router.push('/profile')
           })
       }
-      /* upload cloud storage
-      this.uploadCloudStorage(canvas.toDataURL('image/jpeg'), canvas.width, canvas.height)
-        .then(res1 => {
-          console.log(res1)
-          return self.$firebase.database().ref('users/' + self.user.uid + '/profile').update({
-            avatarURL: res1.downloadURL,
-            displayName: self.user.displayName,
-            email: self.user.email,
-            uid: self.user.uid
-          })
-        })
-        .then(res2 => {
-          self.btnDisabled = false
-          self.step = 0
-          self.$router.push('/profile')
-        })
-        */
     },
     handleReCapture() {
       this.step = 0
@@ -175,6 +161,8 @@ export default {
     handleCapture() {
       var canvas = this.getCapture()
       this.captureData = canvas.toDataURL('image/jpeg')
+      this.captureWidth = canvas.width
+      this.captureHeight = canvas.height
       this.step = 1
       /*
       this.captureDisabled = true
